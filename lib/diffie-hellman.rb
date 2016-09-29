@@ -5,25 +5,18 @@ KEY_SIZE = 500
 G = 5
 
 class DiffieHellman
-  def self.generate_p
-    dh.params["p"]
+  attr_reader :p, :pub_key
+
+  def compute_key(other)
+    other = other.to_i if other.is_a? String
+    other.modexp(@priv_key, @p)
   end
 
-  def self.pub_key
-    dh.pub_key
-  end
-
-  def self.compute_key(other)
-    other = OpenSSL::BN.new(other) if other.is_a? String
-    dh.compute_key(other).bytes.inject {|a, b| (a << 8) + b}
-  end
-
-  def self.dh
-    @@dh ||= OpenSSL::PKey::DH.new(KEY_SIZE, G)
-  end
-
-  def self.reset
-    @@dh = nil
+  def initialize(key_size=KEY_SIZE, generator=G)
+    dh = OpenSSL::PKey::DH.new(key_size, generator)
+    @p = dh.params["p"].to_i
+    @priv_key = dh.params["priv_key"].to_i
+    @pub_key = generator.modexp(@priv_key, @p)
   end
 
 end

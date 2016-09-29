@@ -7,7 +7,8 @@ $LOAD_PATH.unshift(File.expand_path(
 
 require "diffie-hellman"
 
-puts "p:" + DiffieHellman.generate_p.to_s + "\n\n"
-puts "public key:" + DiffieHellman.pub_key.to_s + "\n\n"
+dh = DiffieHellman.new
+puts "p:" + dh.p.to_s + "\n\n"
+puts "public key:" + dh.pub_key.to_s + "\n\n"
 print "enter other key:"
-puts "\nshared secret:" + DiffieHellman::compute_key(gets.chomp).to_s
+puts "\nshared secret:" + dh.compute_key(gets.chomp).to_s
