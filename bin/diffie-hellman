@@ -8,7 +8,8 @@ $LOAD_PATH.unshift(File.expand_path(
 require "diffie-hellman"
 
 dh = DiffieHellman.new
-puts "p:" + dh.p.to_s + "\n\n"
-puts "public key:" + dh.pub_key.to_s + "\n\n"
-print "enter other key:"
-puts "\nshared secret:" + dh.compute_key(gets.chomp).to_s
+# separate the long numeric values by newlines
+puts "p:" + dh.p.to_s + "\n\n" # display the value of the prime modulus, p
+puts "public key:" + dh.pub_key.to_s + "\n\n" # display the value of the script's public key
+print "enter other key:" # ask for the other public key
+puts "\nshared secret:" + dh.compute_key(gets.chomp).to_s # compute the shared key
