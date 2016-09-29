@@ -1,4 +1,6 @@
-require "openssl"
+require "openssl/bn"
+require "modularexponent"
+require "securerandom"
 
 KEY_SIZE = 500
 G = 5
@@ -12,9 +14,9 @@ class DiffieHellman
   end
 
   def initialize(key_size=KEY_SIZE, generator=G)
-    dh = OpenSSL::PKey::DH.new(key_size, generator)
-    @p = dh.params["p"].to_i
-    @priv_key = dh.params["priv_key"].to_i
+    raise "key size must be divisible by 4" if key_size % 4 != 0
+    @p = OpenSSL::BN::generate_prime(key_size, true).to_i
+    @priv_key = SecureRandom.random_number(2 ** key_size)
     @pub_key = generator.modexp(@priv_key, @p)
   end
 
