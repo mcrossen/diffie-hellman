@@ -30,7 +30,7 @@ class TestDiffieHellman < MiniTest::Test
   def test_pubkey
     dh = DiffieHellman.new
     # use different modular exponentiation library for test
-    assert_equal(5.to_bn.mod_exp(dh.priv_key, dh.p), dh.pub_key)
+    assert_equal(5.to_bn.mod_exp(dh.priv_key, dh.p).to_i, dh.pub_key)
   end
 
   def test_compute_key
@@ -38,7 +38,7 @@ class TestDiffieHellman < MiniTest::Test
     other_priv_key = 1998286638065473057944506344030256054916203227381748916180906390214373930105605405985818224246280726328877245115163209963634633681313092395058312190549
     # use different modular exponentiation library for test
     other_pub_key = 5.to_bn.mod_exp(other_priv_key, dh.p)
-    other_secret = dh.pub_key.to_bn.mod_exp(other_priv_key, dh.p)
+    other_secret = dh.pub_key.to_bn.mod_exp(other_priv_key, dh.p).to_i
     secret = dh.compute_key(other_pub_key.to_s)
     assert_equal(other_secret, secret, "secrets do not match")
   end
